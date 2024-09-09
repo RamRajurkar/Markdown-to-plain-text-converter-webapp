@@ -3,11 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Markdown to Plain Text Converter</title>
+    <title>Markdown to Plain Text & Summarizer</title>
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f4f4f9;
+            background-color: #343541;
+            color: #eceff1;
             margin: 0;
             padding: 0;
             display: flex;
@@ -15,15 +18,15 @@
             min-height: 100vh;
         }
         header {
-            background-color: #007bff;
-            color: #ffffff;
-            padding: 15px 20px;
+            background-color: #202123;
+            color: #eceff1;
+            padding: 20px;
             text-align: center;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         footer {
-            background-color: #007bff;
-            color: #ffffff;
+            background-color: #202123;
+            color: #eceff1;
             padding: 10px;
             text-align: center;
             margin-top: auto;
@@ -31,117 +34,151 @@
         }
         .container {
             max-width: 800px;
-            width: 100%;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            box-sizing: border-box;
-            position: relative;
-            overflow: hidden;
-            margin: 20px auto;
+            background-color: #40414f;
+            margin-top: 50px;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
         h1 {
-            color: #333;
-            margin: 0;
+            color: #eceff1;
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        h2 {
+            color: #eceff1;
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 10px;
         }
         textarea {
             width: 100%;
             height: 200px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            padding: 15px;
             font-size: 16px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-            resize: none;
+            background-color: #52556b;
+            color: #eceff1;
+            border: 1px solid #2b2b3d;
         }
         button {
-            display: inline-block;
-            padding: 12px 20px;
-            background-color: #007bff;
-            color: #ffffff;
-            border: none;
-            border-radius: 8px;
+            margin: 10px 0;
+            padding: 10px 20px;
+            border-radius: 10px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: background-color 0.3s ease-in-out;
         }
         button:hover {
-            background-color: #0056b3;
+            opacity: 0.9;
+        }
+        .btn-primary {
+            background-color: #10a37f;
+            border: none;
+        }
+        .btn-secondary {
+            background-color: #40414f;
+            border: 1px solid #eceff1;
+        }
+        .btn-success {
+            background-color: #10a37f;
+            border: none;
         }
         .result-container {
-            position: relative;
+            margin-top: 30px;
+            background-color: #2b2b3d;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #444654;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
         }
         pre {
-            background-color: #f8f9fa;
+            background-color: #40414f;
             padding: 15px;
-            border-radius: 8px;
+            border-radius: 10px;
+            border: 1px solid #2b2b3d;
             white-space: pre-wrap;
             word-wrap: break-word;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-            margin: 0;
+            font-size: 16px;
+            color: #eceff1;
         }
         .copy-btn {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+            margin-top: 10px;
+            display: inline-block;
             padding: 8px 15px;
-            background-color: #28a745;
+            background-color: #10a37f;
             color: #fff;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             font-size: 14px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-        .copy-btn:hover {
-            background-color: #218838;
+        .spinner-border {
+            display: none;
+            margin-top: 20px;
         }
-        @media (max-width: 600px) {
-            textarea {
-                height: 150px;
-            }
-            button {
-                width: 100%;
-                margin-top: 10px;
-            }
-            .copy-btn {
-                position: static;
-                width: 100%;
-                margin-top: 10px;
-            }
+        footer {
+            background-color: #202123;
+            color: #eceff1;
+            padding: 10px;
+            text-align: center;
+            margin-top: auto;
         }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>Markdown to Plain Text Converter</h1>
+        <h1>Markdown Converter & Summarizer</h1>
     </header>
 
     <div class="container">
-        <form method="POST">
-            <textarea name="markdown_text" placeholder="Enter your Markdown here..."></textarea>
-            <button type="submit">Convert to Plain Text</button>
+        <form method="POST" id="textForm">
+            <textarea name="markdown_text" id="markdownText" placeholder="Enter your Markdown here...">{{ markdown_text }}</textarea>
+            <div class="text-center">
+                <button type="submit" name="convert_button" class="btn btn-primary">Convert to Plain Text</button>
+                <button type="submit" name="summarize_button" class="btn btn-secondary">Summarize the Text</button>
+            </div>
+            <div class="text-center">
+                <div class="spinner-border text-primary" role="status" id="loadingSpinner">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
         </form>
 
-        {% if plain_text %}
-        <div class="result-container">
+        <!-- Plain Text Result Section -->
+        {% if action == 'convert' %}
+        <div id="plainTextContainer" class="result-container">
             <h2>Plain Text Result:</h2>
             <pre id="plainText">{{ plain_text }}</pre>
-            <button class="copy-btn" onclick="copyToClipboard()">Copy</button>
+            <button class="btn btn-success copy-btn" onclick="copyToClipboard()">Copy</button>
+        </div>
+        {% endif %}
+
+        <!-- Summarized Text Result Section -->
+        {% if action == 'summarize' %}
+        <div id="summaryTextContainer" class="result-container">
+            <h2>Summarized Text Result:</h2>
+            <pre id="summaryText">{{ summary_text }}</pre>
+            <button class="btn btn-success copy-btn" onclick="copySummaryToClipboard()">Copy</button>
         </div>
         {% endif %}
     </div>
 
     <footer>
-        <p>&copy; 2024 Markdown Converter. All rights reserved. <br>
-        Devloped by Ram Rajurkar</p>
+        <p>&copy; 2024 Markdown Converter. Developed by Ram Rajurkar</p>
     </footer>
 
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script>
+        // Function to copy plain text result to clipboard
         function copyToClipboard() {
             const plainText = document.getElementById('plainText').innerText;
             const tempTextArea = document.createElement('textarea');
@@ -152,6 +189,23 @@
             document.body.removeChild(tempTextArea);
             alert('Text copied to clipboard!');
         }
+
+        // Function to copy summarized text result to clipboard
+        function copySummaryToClipboard() {
+            const summaryText = document.getElementById('summaryText').innerText;
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = summaryText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            alert('Summary copied to clipboard!');
+        }
+
+        // Show spinner when form is submitted
+        document.getElementById('textForm').addEventListener('submit', function() {
+            document.getElementById('loadingSpinner').style.display = 'inline-block';
+        });
     </script>
 
 </body>
