@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedbacks</title>
+    <!-- You can include Bootstrap for better formatting -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">User Feedbacks</h1>
+
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+        <br>
+        <br>
+        
+        {% if feedbacks %}
+            <div class="list-group">
+                {% for feedback in feedbacks %}
+                    <div class="list-group-item">
+                        <h5 class="mb-1">{{ feedback.name }} <small class="text-muted">({{ feedback.email }})</small></h5>
+                        <p class="mb-1">{{ feedback.feedback}}</p>
+                        <small class="text-muted">Submitted on: {{ feedback.submitted_at }}</small>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No feedbacks submitted yet.</p>
+        {% endif %}
+    </div>
+
+    <!-- Optional Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

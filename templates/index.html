@@ -6,6 +6,8 @@
     <title>Markdown to Plain Text & Summarizer</title>
     <!-- Bootstrap CSS CDN -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- FontAwesome CDN for social media icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
         body {
             font-family: 'Arial', sans-serif;
@@ -127,12 +129,43 @@
             text-align: center;
             margin-top: auto;
         }
+        /* Contact buttons */
+        .btn-outline-light {
+            margin: 10px;
+            border: 1px solid #eceff1;
+            color: #eceff1;
+            border-radius: 8px;
+            padding: 10px 20px;
+            transition: background-color 0.3s ease-in-out;
+        }
+
+        .btn-outline-light:hover {
+            background-color: #10a37f;
+            color: #fff;
+            border: 1px solid #10a37f;
+        }
+        /* Beta label */
+        .beta-label {
+            background-color: #f39c12;
+            color: white;
+            border-radius: 5px;
+            padding: 3px 5px;
+            font-size: 12px;
+            margin-left: 8px;
+            vertical-align: super;
+        }
     </style>
+      <script>
+        // Function to show alert after feedback submission
+        function showAlert() {
+            alert("Thank you for your feedback!");
+        }
+    </script>
 </head>
 <body>
 
     <header>
-        <h1>Ram's Markdown Converter & Summarizer</h1>
+        <h1>Markdown Converter & Summarizer</h1>
     </header>
 
     <div class="container">
@@ -140,7 +173,10 @@
             <textarea name="markdown_text" id="markdownText" placeholder="Enter your Markdown here...">{{ markdown_text }}</textarea>
             <div class="text-center">
                 <button type="submit" name="convert_button" class="btn btn-primary">Convert to Plain Text</button>
-                <button type="submit" name="summarize_button" class="btn btn-secondary">Summarize the Text</button>
+                <button type="submit" name="summarize_button" class="btn btn-secondary">
+                    Summarize the Text 
+                    <span class="beta-label">Beta</span>
+                </button>
             </div>
             <div class="text-center">
                 <div class="spinner-border text-primary" role="status" id="loadingSpinner">
@@ -166,47 +202,117 @@
             <button class="btn btn-success copy-btn" onclick="copySummaryToClipboard()">Copy</button>
         </div>
         {% endif %}
-    </div>
 
+       
+        
+    </div>
+    <div class="container">
+        <!-- About Section -->
+        <section id="about">
+            <h2 class="text-center mb-4">Welcome to Markdown Converter & Summarizer!</h2>
+            <p>
+                Hey there! 👋 We’re glad you stopped by! This little web app is designed to make your life easier by converting all your Markdown text into clean, easy-to-read plain text. Whether you're a developer or a content creator, we've got you covered! No more hassle of manually stripping Markdown notations—just paste your text, and we’ll handle the rest.
+            </p>
+            <p>
+                Not only that, but we also have a text summarization feature that’s perfect for when you need to get the gist of long articles or notes. 🚀 Please note, though—this feature is still under testing. We’re working hard to improve its accuracy, so bear with us as we continue to tweak things based on your valuable feedback!
+            </p>
+            <p class="font-weight-bold">
+                How does it work?
+            </p>
+            <ul>
+                <li>Just enter your Markdown text in the box below.</li>
+                <li>Click on <strong>"Convert to Plain Text"</strong> to get a clean, easy-to-read version of your content.</li>
+                <li>Feeling curious? Hit the <strong>"Summarize"</strong> button to generate a short summary of your content (still in testing!).</li>
+            </ul>
+            <p>
+                We’re constantly improving, and your feedback helps us do that. Drop your thoughts below, and we’ll get on it ASAP. 😊
+            </p>
+        </section>
+    
+        <hr>
+    
+        <!-- Feedback Form Section -->
+        <section id="feedback">
+            <h2 class="text-center mb-4">We Value Your Feedback!</h2>
+            <p class="text-center">
+                Got suggestions? Spotted a bug? Or just want to say hi? We'd love to hear from you!
+            </p>
+            <form method="POST" action="/submit_feedback">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input type="text" name="name" class="form-control" id="name" placeholder="Enter your name" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="email">Email:</label>
+                    <input type="email" name="email" class="form-control" id="email" placeholder="Enter your email" required>
+                </div>
+            
+                <div class="form-group">
+                    <label for="feedback_text">Feedback:</label>
+                    <textarea name="feedback" class="form-control" rows="5" placeholder="Your feedback here..." required></textarea>
+                </div>
+                
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">Submit Feedback</button>
+                </div>
+            </form>
+            {% if request.args.get('feedback_submitted') %}
+            <script>
+                showAlert();
+            </script>
+        {% endif %}
+            
+        </section>
+        <hr>
+        <section id="contact">
+            <h2 class="text-center mb-4">Get in Touch</h2>
+            <p class="text-center">
+                We’d love to hear from you! Whether you have a question, feedback, or just want to connect, feel free to reach out through any of the platforms below. We're here to help!
+            </p>
+            <div class="text-center">
+                <a href="https://www.instagram.com/ram_rajurkar_007/?hl=en" class="btn btn-outline-light mx-2">
+                    <i class="fab fa-instagram"></i> Follow on Instagram
+                </a>
+                <a href="https://github.com/RamRajurkar" class="btn btn-outline-light mx-2">
+                    <i class="fab fa-github"></i> Check Projects on GitHub
+                </a>
+                <a href="https://www.linkedin.com/in/ram-rajurkar-647b90258?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" class="btn btn-outline-light mx-2">
+                    <i class="fab fa-linkedin"></i> Connect on LinkedIn
+                </a>
+            </div>
+            <p class="text-center mt-4">
+                Or drop us a line directly at: 
+                <a href="https://mail.google.com/mail/?view=cm&fs=1&to=ramrajurkar2020@example.com" class="text-success" target="_blank">ramrajurkar2020@example.com</a>
+
+            </p>
+        </section>
+    </div>
+    
+    
+    
     <footer>
-        <p>&copy; 2024 Markdown Converter. Developed by Ram Rajurkar</p>
+        <p>&copy; 2024 MD Converter - All rights reserved.
+            <br>Developed by Ram Rajurkar
+        </p>
+        
     </footer>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <!-- jQuery and Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
-        // Function to copy plain text result to clipboard
         function copyToClipboard() {
-            const plainText = document.getElementById('plainText').innerText;
-            const tempTextArea = document.createElement('textarea');
-            tempTextArea.value = plainText;
-            document.body.appendChild(tempTextArea);
-            tempTextArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempTextArea);
-            alert('Text copied to clipboard!');
+            var textToCopy = document.getElementById("plainText").innerText;
+            navigator.clipboard.writeText(textToCopy);
         }
 
-        // Function to copy summarized text result to clipboard
         function copySummaryToClipboard() {
-            const summaryText = document.getElementById('summaryText').innerText;
-            const tempTextArea = document.createElement('textarea');
-            tempTextArea.value = summaryText;
-            document.body.appendChild(tempTextArea);
-            tempTextArea.select();
-            document.execCommand('copy');
-            document.body.removeChild(tempTextArea);
-            alert('Summary copied to clipboard!');
+            var textToCopy = document.getElementById("summaryText").innerText;
+            navigator.clipboard.writeText(textToCopy);
         }
-
-        // Show spinner when form is submitted
-        document.getElementById('textForm').addEventListener('submit', function() {
-            document.getElementById('loadingSpinner').style.display = 'inline-block';
-        });
     </script>
-
 </body>
 </html>
