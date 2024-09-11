@@ -260,8 +260,14 @@
             {% if request.args.get('feedback_submitted') %}
             <script>
                 showAlert();
+                // Remove the query parameter from the URL after the alert is shown
+                if (history.pushState) {
+                    var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                    window.history.pushState({ path: newurl }, '', newurl);
+                }
             </script>
-        {% endif %}
+            {% endif %}
+
             
         </section>
         <hr>

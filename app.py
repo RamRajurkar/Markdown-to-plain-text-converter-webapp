@@ -62,6 +62,8 @@ def index():
     action = ""
     markdown_text = ""
 
+    feedback_submitted = request.args.get('feedback_submitted')
+
     if request.method == 'POST':
             markdown_text = request.form.get('markdown_text', '').strip()
             
@@ -81,7 +83,7 @@ def index():
                         flash('There was an error processing the summarization. Please try again.', 'danger')
 
         
-    return render_template('index.html', plain_text=plain_text, summary_text=summary_text, action=action, markdown_text=markdown_text)
+    return render_template('index.html', plain_text=plain_text, summary_text=summary_text, action=action, markdown_text=markdown_text, feedback_submitted=feedback_submitted)
 
 @app.route('/submit_feedback', methods=['POST'])
 def submit_feedback():
